@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { Component, Fragment } from 'react';
+import { HashRouter as Router, Link, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Cart from "./pages/Cart";
+import Mine from "./pages/Mine";
+import MyLayout from "./components/MyLayout";
 
-function App() {
-  return (
-    <div className="App">
-   
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <Fragment>
+        {this.props.children}
+        <Router>
+          <Route path="/" exact render={(props) => <MyLayout  {...props}><Home /></MyLayout>} ></Route>
+          <Route path="/Cart" render={(props) => <MyLayout  {...props}><Cart /></MyLayout>} ></Route>
+          <Route path="/Mine" render={(props) => <MyLayout  {...props}><Mine /></MyLayout>} ></Route>
+        </Router>
+
+      </Fragment>
+    );
+  }
 }
-
 export default App;
+
