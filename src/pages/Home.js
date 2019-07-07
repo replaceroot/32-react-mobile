@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { getGoods,getGoodsGroup } from "../request";
+import { getGoods, getGoodsGroup } from "../request";
 import { Carousel, WingBlank } from 'antd-mobile';
 class Home extends Component {
   state = {
@@ -15,23 +15,21 @@ class Home extends Component {
     getGoods()
       .then(res => {
         this.setState({
-          sliderlist: res.data.message.sliderlist,
-          toplist: res.data.message.toplist,
+          sliderlist: res.sliderlist,
+          toplist: res.toplist,
         });
       })
 
-      getGoodsGroup()
-      .then(res=>{
-        this.setState({ goodsgrouplist: res.data.message  });
+    getGoodsGroup()
+      .then(res => {
+        this.setState({ goodsgrouplist: res });
       })
   }
 
   render() {
-    console.log(this.props.history);
+
     return (
       <Fragment>
-        <h1 onClick={()=>this.props.history.push("/GoodsDetail/100")}>跳转</h1>
-
         <Carousel
           autoplay
           infinite
@@ -39,7 +37,7 @@ class Home extends Component {
           {this.state.sliderlist.map(val => (
             <div
               key={val.id}
-              onClick={()=>this.props.history.push("/GoodsDetail/"+val.id)}
+              onClick={() => this.props.history.push("/GoodsDetail/" + val.id)}
               style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
             >
               <img
@@ -61,7 +59,7 @@ class Home extends Component {
           <div className="recommonent_title">推荐商品</div>
           <div className="recommonent_content">
             {this.state.toplist.map(v =>
-              <div onClick={()=>this.props.history.push("/GoodsDetail/"+v.id)} className="rec_item" key={v.id} >
+              <div onClick={() => this.props.history.push("/GoodsDetail/" + v.id)} className="rec_item" key={v.id} >
                 <div className="rec_item_img_wrap">
                   <img src={v.img_url} alt="" />
                 </div>
@@ -77,23 +75,23 @@ class Home extends Component {
         {/* 推荐商品结束 */}
         {/* 商品列表 开始 */}
         <div className="goods_list">
-          {this.state.goodsgrouplist.map(v1=>
-          <div key={v1.level1cateid} className="goods_group">
-            <div className="goods_group_title">{v1.catetitle}</div>
-            <ul className="goods_group_content">
-              {v1.datas.map(v2=>
-              <li key={v2.artID} onClick={()=>this.props.history.push("/GoodsDetail/"+v2.artID)}>
-                <img src={v2.img_url} alt=""/>
-                <div className="goods_name">{v2.artTitle}</div>
-                <div className="goods_price_row">
-                  <span className="sell_price"> ￥ {v2.sell_price}</span>
-                  <span className="market_price">￥ {v2.market_price}</span>
-                </div>
-                <div className="goods_hot_sell">热卖中 <span>{v2.stock_quantity} 件</span></div>
-              </li> )}
-            </ul>
-          </div>
-            )}
+          {this.state.goodsgrouplist.map(v1 =>
+            <div key={v1.level1cateid} className="goods_group">
+              <div className="goods_group_title">{v1.catetitle}</div>
+              <ul className="goods_group_content">
+                {v1.datas.map(v2 =>
+                  <li key={v2.artID} onClick={() => this.props.history.push("/GoodsDetail/" + v2.artID)}>
+                    <img src={v2.img_url} alt="" />
+                    <div className="goods_name">{v2.artTitle}</div>
+                    <div className="goods_price_row">
+                      <span className="sell_price"> ￥ {v2.sell_price}</span>
+                      <span className="market_price">￥ {v2.market_price}</span>
+                    </div>
+                    <div className="goods_hot_sell">热卖中 <span>{v2.stock_quantity} 件</span></div>
+                  </li>)}
+              </ul>
+            </div>
+          )}
         </div>
         {/* 商品列表 结束 */}
         <style jsx>{`  
