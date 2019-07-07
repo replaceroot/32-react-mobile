@@ -83,7 +83,7 @@ class GoodsDetail extends Component {
             <span className="iconfont icon-kefu"></span>
             <div className="bar_name">客服</div>
           </div>
-          <div className="bar_item  shopping_cart">
+          <div className="bar_item  shopping_cart"  onClick={()=>this.props.history.push("/Cart")} >
             <span className="iconfont icon-gouwuche"></span>
             <div className="bar_name">购物车</div>
             <span className="mark"> {8} </span>
