@@ -1,14 +1,14 @@
-import { CART_CHECK, CART_ALL_CHECK  } from "../actionTypes";
+import { CART_CHECK, CART_ALL_CHECK,CART_NUM_UPDATE } from "../actionTypes";
 
 
 /**
  * 改变商品的选中状态
  * @param {number} id 要操作的商品的id
  */
-export const cartCheck=(id)=>{
+export const cartCheck = (id) => {
   return {
-    type:CART_CHECK,
-    value:{id}
+    type: CART_CHECK,
+    value: { id }
   }
 }
 
@@ -16,9 +16,21 @@ export const cartCheck=(id)=>{
  * 实现点击全选 改变商品的选中状态
  * @param {bool} isChecked 全选按钮的状态
  */
-export const cartAllCheck=(isChecked)=>{
+export const cartAllCheck = (isChecked) => {
   return {
-    type:CART_ALL_CHECK,
-    value:{isChecked}
+    type: CART_ALL_CHECK,
+    value: { isChecked }
+  }
+}
+
+/**
+ * 修改购物车数量
+ * @param {number} id 要操作的id
+ * @param {number} unit 加多少减多少
+ */
+export const cartNumUpdate = (id, unit) => {
+  return {
+    type: CART_NUM_UPDATE,
+    value: { id,unit }
   }
 }

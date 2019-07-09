@@ -1,4 +1,4 @@
-import { CART_CHECK, CART_ALL_CHECK } from "../actionTypes";
+import { CART_CHECK, CART_ALL_CHECK, CART_NUM_UPDATE } from "../actionTypes";
 
 const defaultState = {
   cartList: [
@@ -21,11 +21,12 @@ const defaultState = {
   ]
 }
 export default (state = defaultState, action) => {
+  let newState = JSON.parse(JSON.stringify(state));
   switch (action.type) {
     case CART_CHECK:
       {
         // 1 深拷贝一份state
-        let newState = JSON.parse(JSON.stringify(state));
+        // let newState = JSON.parse(JSON.stringify(state));
         let { id } = action.value;
         // 2 或要操作的购物车对象的索引
         let index = newState.cartList.findIndex(v => v.id === id);
@@ -41,10 +42,19 @@ export default (state = defaultState, action) => {
         3 修改购物车对象的选中状态
         4 返回新的state
          */
-        let newState = JSON.parse(JSON.stringify(state));
+        // let newState = JSON.parse(JSON.stringify(state));
         // 遍历循环购物车对象
         // forEach 里面修改循环项 的时候 也会修改到源数组
         newState.cartList.forEach(v => v.isChecked = action.value.isChecked);
+        return newState;
+      }
+    case CART_NUM_UPDATE:
+      {
+        // 获取被操作的购物车的索引
+        let { id, unit } = action.value;
+        let index = newState.cartList.findIndex(v => v.id === id);
+     
+        newState.cartList[index].num += unit;
         return newState;
       }
     default:

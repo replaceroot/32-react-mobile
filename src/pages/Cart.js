@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { NavBar, Icon, SwipeAction, List, Checkbox, Button } from "antd-mobile";
 // 1 引入 路由  withRouter
 import { withRouter } from "react-router-dom";
-import { cartCheck, cartAllCheck } from "../store/actionCreator";
+import { cartCheck, cartAllCheck, cartNumUpdate } from "../store/actionCreator";
 import { connect } from "react-redux";
 
 
@@ -59,9 +59,9 @@ class Cart extends Component {
                     </div>
                     {/* 工具栏 */}
                     <div className="cart_tool_row">
-                      <Button type="primary" inline size="small" >-</Button>
+                      <Button onClick={() => this.props.hanldeCartNumUpdate(v.id, -1)} type="primary" inline size="small" >-</Button>
                       <span className="goods_num">{v.num}</span>
-                      <Button type="primary" inline size="small" >+</Button>
+                      <Button onClick={() => this.props.hanldeCartNumUpdate(v.id, 1)} type="primary" inline size="small" >+</Button>
                     </div>
                   </div>
 
@@ -191,6 +191,16 @@ const getAllPrice = (arr) => {
   return sum;
 }
 
+const getTotalNums = (arr) => {
+  let sum = 0;
+  arr.forEach(v => {
+    if (v.isChecked) {
+      sum += v.num;
+    }
+  })
+  return sum;
+}
+
 
 const mapStateToProps = (state) => {
   const { cartList } = state.cartReducer;
@@ -203,7 +213,7 @@ const mapStateToProps = (state) => {
     allPrice: getAllPrice(cartList),
     // allPrice: cartList.reduce((beforeSum,v)=>v.isChecked?(beforeSum+=v.price*v.num):beforeSum,0)
     // 需要结算的数量
-    countAll:cartList.filter(v=>v.isChecked).length
+    countAll: getTotalNums(cartList)
   }
 }
 
@@ -214,6 +224,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     handleCartAllCheck: (isChecked) => {
       dispatch(cartAllCheck(isChecked))
+    },
+    hanldeCartNumUpdate: (id, unit) => {
+      dispatch(cartNumUpdate(id, unit));
     }
   }
 }
