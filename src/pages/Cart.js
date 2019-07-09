@@ -84,7 +84,7 @@ class Cart extends Component {
           </div>
           {/* 结算 */}
           <div className="count_row">
-            去结算({10})
+            去结算({this.props.countAll})
           </div>
         </div>
         {/* 底部工具栏 结束 */}
@@ -180,6 +180,7 @@ div.btm_tool {
   }
 }
 
+// 计算总价
 const getAllPrice = (arr) => {
   let sum = 0;
   arr.forEach(v => {
@@ -199,8 +200,10 @@ const mapStateToProps = (state) => {
     // 当所有的购物车对象的选中状态都为true时 全选就true
     allCheck: cartList.every(v => v.isChecked),
     // 总价
-    allPrice: getAllPrice(cartList)
+    allPrice: getAllPrice(cartList),
     // allPrice: cartList.reduce((beforeSum,v)=>v.isChecked?(beforeSum+=v.price*v.num):beforeSum,0)
+    // 需要结算的数量
+    countAll:cartList.filter(v=>v.isChecked).length
   }
 }
 
