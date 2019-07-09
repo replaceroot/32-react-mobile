@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { NavBar, Icon, SwipeAction, List, Checkbox, Button } from "antd-mobile";
 // 1 引入 路由  withRouter
 import { withRouter } from "react-router-dom";
-import { cartCheck } from "../store/actionCreator";
+import { cartCheck, cartAllCheck } from "../store/actionCreator";
 import { connect } from "react-redux";
 
 
@@ -77,7 +77,7 @@ class Cart extends Component {
         <div className="btm_tool">
           {/* 全选 */}
           <div className="all_check_row">
-            <CheckboxItem checked={this.props.allCheck}>全选</CheckboxItem>
+            <CheckboxItem onChange={(e)=>this.props.handleCartAllCheck(e.target.checked)} checked={this.props.allCheck}>全选</CheckboxItem>
           </div>
           {/* 总价 */}
           <div className="total_price_row">
@@ -195,6 +195,9 @@ const mapDispatchToProps=(dispatch)=>{
   return {
     hanleCartCheck:(id)=>{
       dispatch(cartCheck(id));
+    },
+    handleCartAllCheck:(isChecked)=>{
+      dispatch(cartAllCheck(isChecked))
     }
   }
 }
