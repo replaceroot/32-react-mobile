@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
-
-import { NavBar, Icon } from "antd-mobile";
+import { NavBar, Icon, SwipeAction, List } from "antd-mobile";
 
 // 1 引入 路由  withRouter
 import { withRouter } from "react-router-dom";
@@ -18,6 +17,42 @@ class Cart extends Component {
           icon={<Icon type="left" />}
           onLeftClick={() => this.props.history.go(-1)}
         >购物车</NavBar>
+        {/* 购物车内容 开始 */}
+        <div className="cart_content">
+          {this.props.cartList.map(v =>
+            <div className="cart_item" key={v.id} >
+              <List>
+                <SwipeAction
+                  style={{ backgroundColor: 'gray' }}
+                  autoClose
+                  right={[
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('cancel'),
+                      style: { backgroundColor: '#ddd', color: 'white' },
+                    },
+                    {
+                      text: 'Delete',
+                      onPress: () => console.log('delete'),
+                      style: { backgroundColor: '#F4333C', color: 'white' },
+                    },
+                  ]}
+                  onOpen={() => console.log('global open')}
+                  onClose={() => console.log('global close')}
+                >
+            
+                  <div className="cart_item_inner">
+
+                    
+                  </div>
+
+                </SwipeAction>
+              </List>
+
+            </div>
+          )}
+        </div>
+        {/* 购物车内容 结束 */}
       </Fragment>
     );
   }
