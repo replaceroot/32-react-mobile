@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { getGoods, getGoodsGroup } from "../request";
-import { Carousel, WingBlank } from 'antd-mobile';
+import { Carousel} from 'antd-mobile';
 class Home extends Component {
   state = {
     imgHeight: 176,

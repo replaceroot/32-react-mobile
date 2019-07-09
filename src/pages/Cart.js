@@ -12,7 +12,6 @@ const CheckboxItem = Checkbox.CheckboxItem;
 class Cart extends Component {
 
   render() {
-    console.log(this.props.cartList);
     return (
       <Fragment>
         <NavBar
@@ -47,7 +46,7 @@ class Cart extends Component {
                   <div className="cart_item_inner">
                     {/* 复选框 */}
                     <div className="cart_chk_row">
-                      <CheckboxItem checked={v.isChecked} onChange={()=>this.props.hanleCartCheck(v.id)}  />
+                      <CheckboxItem checked={v.isChecked} onChange={() => this.props.hanleCartCheck(v.id)} />
                     </div>
                     {/* 商品图片 */}
                     <div className="cart_goods_img_row">
@@ -77,11 +76,11 @@ class Cart extends Component {
         <div className="btm_tool">
           {/* 全选 */}
           <div className="all_check_row">
-            <CheckboxItem onChange={(e)=>this.props.handleCartAllCheck(e.target.checked)} checked={this.props.allCheck}>全选</CheckboxItem>
+            <CheckboxItem onChange={(e) => this.props.handleCartAllCheck(e.target.checked)} checked={this.props.allCheck}>全选</CheckboxItem>
           </div>
           {/* 总价 */}
           <div className="total_price_row">
-            合计 <span className="total_price">￥{199}</span>
+            合计 <span className="total_price">￥{this.props.allPrice}</span>
           </div>
           {/* 结算 */}
           <div className="count_row">
@@ -181,22 +180,36 @@ div.btm_tool {
   }
 }
 
+const getAllPrice = (arr) => {
+  let sum = 0;
+  arr.forEach(v => {
+    if (v.isChecked) {
+      sum += v.price * v.num;
+    }
+  })
+  return sum;
+}
+
+
 const mapStateToProps = (state) => {
-  const {cartList}=state.cartReducer;
+  const { cartList } = state.cartReducer;
   return {
     // props.cartList
     cartList: cartList,
     // 当所有的购物车对象的选中状态都为true时 全选就true
-    allCheck:cartList.every(v=>v.isChecked)
+    allCheck: cartList.every(v => v.isChecked),
+    // 总价
+    allPrice: getAllPrice(cartList)
+    // allPrice: cartList.reduce((beforeSum,v)=>v.isChecked?(beforeSum+=v.price*v.num):beforeSum,0)
   }
 }
 
-const mapDispatchToProps=(dispatch)=>{
+const mapDispatchToProps = (dispatch) => {
   return {
-    hanleCartCheck:(id)=>{
+    hanleCartCheck: (id) => {
       dispatch(cartCheck(id));
     },
-    handleCartAllCheck:(isChecked)=>{
+    handleCartAllCheck: (isChecked) => {
       dispatch(cartAllCheck(isChecked))
     }
   }

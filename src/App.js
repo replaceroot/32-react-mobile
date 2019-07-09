@@ -10,7 +10,6 @@ class App extends Component {
   render() {
     return (
       <Fragment>
-        {this.props.children}
         <Router>
           <Route path="/" exact render={(props) => <MyLayout  {...props}><Home  {...props} /></MyLayout>} ></Route>
           <Route path="/Cart" render={(props) => <MyLayout  {...props}><Cart /></MyLayout>} ></Route>
