@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { NavBar, Icon, Carousel } from 'antd-mobile';
 import { getGoodsInfo } from "../request";
+import { connect } from "react-redux";
 class GoodsDetail extends Component {
   state = {
     imgHeight: 146,
@@ -83,10 +84,10 @@ class GoodsDetail extends Component {
             <span className="iconfont icon-kefu"></span>
             <div className="bar_name">客服</div>
           </div>
-          <div className="bar_item  shopping_cart"  onClick={()=>this.props.history.push("/Cart")} >
+          <div className="bar_item  shopping_cart" onClick={() => this.props.history.push("/Cart")} >
             <span className="iconfont icon-gouwuche"></span>
             <div className="bar_name">购物车</div>
-            <span className="mark"> {8} </span>
+            <span className="mark" hidden={this.props.countAll===0}  > {this.props.countAll} </span>
           </div>
           <div className="bar_item btn_cart_add ">
             加入购物车
@@ -210,5 +211,23 @@ div.footer_bar {
     );
   }
 }
-export default GoodsDetail;
+
+const getTotalNums = (arr) => {
+  let sum = 0;
+  arr.forEach(v => {
+    if (v.isChecked) {
+      sum += v.num;
+    }
+  })
+  return sum;
+}
+const mapStateToProps = (state) => {
+  const { cartList } = state.cartReducer;
+  return {
+    // 需要结算的数量
+    countAll: getTotalNums(cartList)
+  }
+}
+
+export default connect(mapStateToProps,null)(GoodsDetail);
 

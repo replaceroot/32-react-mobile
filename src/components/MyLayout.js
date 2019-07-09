@@ -1,6 +1,6 @@
 import React from "react";
 import { TabBar } from 'antd-mobile';
-
+import { connect } from "react-redux";
 class MyLayout extends React.Component {
   render() {
     return (
@@ -28,12 +28,12 @@ class MyLayout extends React.Component {
             selectedIcon={<span className="iconfont icon-gouwuche" />}
             title="Cart"
             key="Cart"
-            badge={1}
+            badge={this.props.countAll}
             selected={this.props.match.url === "/Cart"}
             onPress={() => { this.props.history.push("/Cart") }}
 
           >
-             {this.props.match.url === "/Cart" && this.props.children}
+            {this.props.match.url === "/Cart" && this.props.children}
           </TabBar.Item>
           <TabBar.Item
             icon={<span className="iconfont icon-weibiaoti2fuzhi12" />}
@@ -44,7 +44,7 @@ class MyLayout extends React.Component {
             selected={this.props.match.url === "/Mine"}
             onPress={() => { this.props.history.push("/Mine") }}
           >
-              {this.props.match.url === "/Mine" && this.props.children}
+            {this.props.match.url === "/Mine" && this.props.children}
           </TabBar.Item>
         </TabBar>
       </div>
@@ -52,6 +52,23 @@ class MyLayout extends React.Component {
   }
 }
 
-export default MyLayout;
+const getTotalNums = (arr) => {
+  let sum = 0;
+  arr.forEach(v => {
+    if (v.isChecked) {
+      sum += v.num;
+    }
+  })
+  return sum;
+}
+const mapStateToProps = (state) => {
+  const { cartList } = state.cartReducer;
+  return {
+    // 需要结算的数量
+    countAll: getTotalNums(cartList)
+  }
+}
+
+export default connect(mapStateToProps, null)(MyLayout);
 
 

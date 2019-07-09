@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import { NavBar, Icon, SwipeAction, List, Checkbox, Button } from "antd-mobile";
+import { NavBar, Icon, SwipeAction, List, Checkbox, Button, Modal } from "antd-mobile";
+
 // 1 引入 路由  withRouter
 import { withRouter } from "react-router-dom";
-import { cartCheck, cartAllCheck, cartNumUpdate } from "../store/actionCreator";
+import { cartCheck, cartAllCheck, cartNumUpdate, cartDelete } from "../store/actionCreator";
 import { connect } from "react-redux";
-
+const alert = Modal.alert;
 
 const CheckboxItem = Checkbox.CheckboxItem;
 
@@ -29,13 +30,13 @@ class Cart extends Component {
                   autoClose
                   right={[
                     {
-                      text: 'Cancel',
+                      text: '取消',
                       onPress: () => console.log('cancel'),
                       style: { backgroundColor: '#ddd', color: 'white' },
                     },
                     {
-                      text: 'Delete',
-                      onPress: () => console.log('delete'),
+                      text: '删除',
+                      onPress: () => this.props.handleCartRemove(v.id),
                       style: { backgroundColor: '#F4333C', color: 'white' },
                     },
                   ]}
@@ -59,9 +60,9 @@ class Cart extends Component {
                     </div>
                     {/* 工具栏 */}
                     <div className="cart_tool_row">
-                      <Button onClick={() => this.props.hanldeCartNumUpdate(v.id, -1)} type="primary" inline size="small" >-</Button>
+                      <Button onClick={() => this.props.hanldeCartNumUpdate(v.id, -1, v.num)} type="primary" inline size="small" >-</Button>
                       <span className="goods_num">{v.num}</span>
-                      <Button onClick={() => this.props.hanldeCartNumUpdate(v.id, 1)} type="primary" inline size="small" >+</Button>
+                      <Button onClick={() => this.props.hanldeCartNumUpdate(v.id, 1, v.num)} type="primary" inline size="small" >+</Button>
                     </div>
                   </div>
 
@@ -208,7 +209,7 @@ const mapStateToProps = (state) => {
     // props.cartList
     cartList: cartList,
     // 当所有的购物车对象的选中状态都为true时 全选就true
-    allCheck: cartList.every(v => v.isChecked),
+    allCheck: cartList.length != 0 && cartList.every(v => v.isChecked),
     // 总价
     allPrice: getAllPrice(cartList),
     // allPrice: cartList.reduce((beforeSum,v)=>v.isChecked?(beforeSum+=v.price*v.num):beforeSum,0)
@@ -225,8 +226,33 @@ const mapDispatchToProps = (dispatch) => {
     handleCartAllCheck: (isChecked) => {
       dispatch(cartAllCheck(isChecked))
     },
-    hanldeCartNumUpdate: (id, unit) => {
-      dispatch(cartNumUpdate(id, unit));
+    hanldeCartNumUpdate: (id, unit, num) => {
+      // 1 判断是否要执行删除
+      if (unit === -1 && num === 1) {
+
+        alert('警告', '您确定删除吗', [
+          { text: '取消', onPress: () => console.log('取消') },
+          {
+            text: '删除', onPress: () => {
+              // 执行删除
+              dispatch(cartDelete(id))
+            }
+          },
+        ])
+      } else {
+        dispatch(cartNumUpdate(id, unit));
+      }
+    },
+    handleCartRemove: (id) => {
+      alert('警告', '您确定删除吗', [
+        { text: '取消', onPress: () => console.log('取消') },
+        {
+          text: '删除', onPress: () => {
+            // 执行删除
+            dispatch(cartDelete(id))
+          }
+        },
+      ])
     }
   }
 }

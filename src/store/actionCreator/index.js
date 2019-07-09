@@ -1,4 +1,4 @@
-import { CART_CHECK, CART_ALL_CHECK,CART_NUM_UPDATE } from "../actionTypes";
+import { CART_CHECK, CART_ALL_CHECK, CART_NUM_UPDATE, CART_DELETE } from "../actionTypes";
 
 
 /**
@@ -31,6 +31,18 @@ export const cartAllCheck = (isChecked) => {
 export const cartNumUpdate = (id, unit) => {
   return {
     type: CART_NUM_UPDATE,
-    value: { id,unit }
+    value: { id, unit }
+  }
+}
+
+
+/**
+ * 删除购物车数据
+ * @param {number} id 要删除的id
+ */
+export const cartDelete = (id) => {
+  return {
+    type: CART_DELETE,
+    value: { id }
   }
 }

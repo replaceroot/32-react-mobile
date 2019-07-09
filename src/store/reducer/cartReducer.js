@@ -1,4 +1,4 @@
-import { CART_CHECK, CART_ALL_CHECK, CART_NUM_UPDATE } from "../actionTypes";
+import { CART_CHECK, CART_ALL_CHECK, CART_NUM_UPDATE, CART_DELETE } from "../actionTypes";
 
 const defaultState = {
   cartList: [
@@ -53,8 +53,15 @@ export default (state = defaultState, action) => {
         // 获取被操作的购物车的索引
         let { id, unit } = action.value;
         let index = newState.cartList.findIndex(v => v.id === id);
-     
+
         newState.cartList[index].num += unit;
+        return newState;
+      }
+    case CART_DELETE:
+      {
+        let { id } = action.value;
+        let index = newState.cartList.findIndex(v => v.id === id);
+        newState.cartList.splice(index, 1);
         return newState;
       }
     default:
