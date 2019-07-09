@@ -1,10 +1,13 @@
 import React, { Component, Fragment } from 'react';
-import { NavBar, Icon, SwipeAction, List } from "antd-mobile";
-
+import { NavBar, Icon, SwipeAction, List, Checkbox, Button } from "antd-mobile";
 // 1 引入 路由  withRouter
 import { withRouter } from "react-router-dom";
-
+import { cartCheck } from "../store/actionCreator";
 import { connect } from "react-redux";
+
+
+const CheckboxItem = Checkbox.CheckboxItem;
+
 
 class Cart extends Component {
 
@@ -40,10 +43,27 @@ class Cart extends Component {
                   onOpen={() => console.log('global open')}
                   onClose={() => console.log('global close')}
                 >
-            
-                  <div className="cart_item_inner">
 
-                    
+                  <div className="cart_item_inner">
+                    {/* 复选框 */}
+                    <div className="cart_chk_row">
+                      <CheckboxItem checked={v.isChecked} onChange={()=>this.props.hanleCartCheck(v.id)}  />
+                    </div>
+                    {/* 商品图片 */}
+                    <div className="cart_goods_img_row">
+                      <img src={v.img_url} alt="" />
+                    </div>
+                    {/* 商品信息 */}
+                    <div className="cart_goodsinfo_row">
+                      <div className="goods_name">{v.title}</div>
+                      <div className="goods_price">￥{v.price}</div>
+                    </div>
+                    {/* 工具栏 */}
+                    <div className="cart_tool_row">
+                      <Button type="primary" inline size="small" >-</Button>
+                      <span className="goods_num">{v.num}</span>
+                      <Button type="primary" inline size="small" >+</Button>
+                    </div>
                   </div>
 
                 </SwipeAction>
@@ -53,6 +73,55 @@ class Cart extends Component {
           )}
         </div>
         {/* 购物车内容 结束 */}
+        <style jsx>{`div.cart_content {
+  div.cart_item {
+    div.cart_item_inner {
+      padding: 10px 0;
+      display: flex;
+      div.cart_chk_row {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      div.cart_goods_img_row {
+        flex: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+          width: 80%;
+        }
+      }
+
+      div.cart_goodsinfo_row {
+        flex: 3;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        div.goods_name {
+        }
+
+        div.goods_price {
+        }
+      }
+
+      div.cart_tool_row {
+       flex: 4;
+       display: flex;
+       align-items: flex-end;
+       justify-content: space-between;
+       .goods_num{
+         padding: 3px;
+         height: 30px;
+         line-height: 30px;
+       }
+      }
+    }
+  }
+}
+`}</style>
       </Fragment>
     );
   }
@@ -65,6 +134,14 @@ const mapStateToProps = (state) => {
   }
 }
 
+const mapDispatchToProps=(dispatch)=>{
+  return {
+    hanleCartCheck:(id)=>{
+      dispatch(cartCheck(id));
+    }
+  }
+}
+
 
 // 2 把路由信息对象也传递到了cart组件中 
-export default connect(mapStateToProps, null)(withRouter(Cart));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Cart));
