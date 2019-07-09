@@ -73,6 +73,22 @@ class Cart extends Component {
           )}
         </div>
         {/* 购物车内容 结束 */}
+        {/* 底部工具栏 开始 */}
+        <div className="btm_tool">
+          {/* 全选 */}
+          <div className="all_check_row">
+            <CheckboxItem checked={this.props.allCheck}>全选</CheckboxItem>
+          </div>
+          {/* 总价 */}
+          <div className="total_price_row">
+            合计 <span className="total_price">￥{199}</span>
+          </div>
+          {/* 结算 */}
+          <div className="count_row">
+            去结算({10})
+          </div>
+        </div>
+        {/* 底部工具栏 结束 */}
         <style jsx>{`div.cart_content {
   div.cart_item {
     div.cart_item_inner {
@@ -108,17 +124,55 @@ class Cart extends Component {
       }
 
       div.cart_tool_row {
-       flex: 4;
-       display: flex;
-       align-items: flex-end;
-       justify-content: space-between;
-       .goods_num{
-         padding: 3px;
-         height: 30px;
-         line-height: 30px;
-       }
+        flex: 4;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        .goods_num {
+          padding: 3px;
+          height: 30px;
+          line-height: 30px;
+        }
       }
     }
+  }
+}
+div.btm_tool {
+  display: flex;
+  position: fixed;
+  width: 100%;
+  height: 50px;
+  left: 0;
+  bottom: 50px;
+  background-color: #fff;
+  div.all_check_row {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  div.total_price_row {
+    flex: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span.total_price {
+      color: orangered;
+      font-size: 15px;
+      font-weight: 600;
+    }
+  }
+
+  div.count_row {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    background-color: orangered;
   }
 }
 `}</style>
@@ -128,9 +182,12 @@ class Cart extends Component {
 }
 
 const mapStateToProps = (state) => {
+  const {cartList}=state.cartReducer;
   return {
     // props.cartList
-    cartList: state.cartReducer.cartList
+    cartList: cartList,
+    // 当所有的购物车对象的选中状态都为true时 全选就true
+    allCheck:cartList.every(v=>v.isChecked)
   }
 }
 
